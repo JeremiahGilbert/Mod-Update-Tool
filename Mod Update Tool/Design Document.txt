@@ -1,4 +1,0 @@
-1. Download patch information.
-2. Download patches.
-3. Unzip patch files.
-4. Clean unneeded files.

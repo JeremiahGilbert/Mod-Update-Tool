@@ -7,8 +7,7 @@ int main() {
 	mods.open("latestMods.txt");
 
 	DIR* directory;
-	struct dirent *entry;
-
+	dirent *entry;
 	if ((directory = opendir("./Mods")) != nullptr) {
 		while ((entry = readdir(directory)) != nullptr) {
 			std::string fileName(entry->d_name);

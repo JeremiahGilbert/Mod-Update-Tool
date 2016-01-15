@@ -26,3 +26,7 @@
 *.exe
 *.out
 *.app
+/Mod Update Tool/Mod Update Tool/Mods
+/Mod Update Tool/x64/Release
+/Mod Update Tool/Mod Update Tool/x64
+*.aps

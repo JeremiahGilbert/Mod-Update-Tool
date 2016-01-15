@@ -7,7 +7,7 @@
 
 #include "CurlWrapper.h"
 
-ModUpdater::ModUpdater(std::string configuration) {
+ModUpdater::ModUpdater(std::string const& configuration) {
 	std::ifstream configurationInputStream;
 	configurationInputStream.open(configuration);
 	if (!configurationInputStream.good()) {
@@ -24,12 +24,14 @@ ModUpdater::ModUpdater(std::string configuration) {
 		configurationInputStream.open(configuration);
 	}
 	std::string option, value;
-	while (configurationInputStream >> option >> value) {
+	while (configurationInputStream >> option) {
+		configurationInputStream.seekg(1, std::ios::cur);
+		std::getline(configurationInputStream, value);
 		configuration_[option] = value;
 	}
 	configurationInputStream.close();
 
-	auto& curl = CurlWrapper::getCurl();
+	auto& curl = std::make_unique<CurlWrapper>();
 	curl->get(configuration_["updateList"], configuration_["updateHost"] + configuration_["updateList"]);
 
 	std::fstream mods;
@@ -44,31 +46,29 @@ ModUpdater::ModUpdater(std::string configuration) {
 
 ModUpdater::~ModUpdater() {}
 
-void ModUpdater::updateMods() {
+void ModUpdater::updateMods() const {
 	for (auto it = modNames_.begin(); it != modNames_.end(); ++it) {
-		if (!fileExists(configuration_["path"] + *it)) {
-			auto& curl = CurlWrapper::getCurl();
+		if (!fileExists(configuration_.at("path") + *it)) {
+			auto& curl = std::make_unique<CurlWrapper>();
 			std::cout << "Downloading new file " << *it << std::endl;
-			curl->get(configuration_["path"] + *it, configuration_["updateHost"] + configuration_["updateRepository"] + curl->escapeURL(*it));
+			curl->get(configuration_.at("path") + *it, configuration_.at("updateHost") + configuration_.at("updateRepository") + curl->escapeURL(*it));
 		}
 	}
-
 	DIR* directory;
 	struct dirent *entry;
-
-	if ((directory = opendir(configuration_["path"].c_str())) != nullptr) {
+	if ((directory = opendir(configuration_.at("path").c_str())) != nullptr) {
 		while ((entry = readdir(directory)) != nullptr) {
 			std::string fileName(entry->d_name);
-			if (!(fileName.substr(fileName.find_last_of(".") + 1) == configuration_["extension"])) continue;
+			if (!(fileName.substr(fileName.find_last_of(".") + 1) == configuration_.at("extension"))) continue;
 			if (modNames_.find(entry->d_name) == modNames_.end()) {
 				std::cout << "Removing old file " << entry->d_name << std::endl;
-				std::remove((std::string() + configuration_["path"] + entry->d_name).c_str());
+				std::remove((std::string() + configuration_.at("path") + entry->d_name).c_str());
 			}
 		}
 	}
 }
 
-bool ModUpdater::fileExists(std::string const file) {
+bool ModUpdater::fileExists(std::string const& file) {
 	std::ifstream fileStream;
 	fileStream.open(file);
 	if (fileStream.good()) {
