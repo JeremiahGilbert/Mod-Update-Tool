@@ -89,7 +89,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Development\Git\Mod-Update-Tool\Mod Update Tool\Curl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Development\Git\Mod-Update-Tool\Mod Update Tool\Dirent\include;C:\Development\Git\Mod-Update-Tool\Mod Update Tool\Curl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -128,11 +128,11 @@
   <ItemGroup>
     <ClCompile Include="CurlWrapper.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="PatchInfo.cpp" />
+    <ClCompile Include="ModUpdater.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CurlWrapper.h" />
-    <ClInclude Include="PatchInfo.h" />
+    <ClInclude Include="ModUpdater.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

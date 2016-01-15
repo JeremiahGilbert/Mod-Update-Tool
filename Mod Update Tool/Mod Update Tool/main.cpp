@@ -1,14 +1,10 @@
-#include <fstream>
-#include <iostream>
 #include <memory>
 
-#include <curl.h>
-
-#include "CurlWrapper.h"
+#include "ModUpdater.h"
 
 int main() {
-	std::unique_ptr<CurlWrapper>& curl = CurlWrapper::getCurl();
-	curl->get("aFile.txt", "https://malitia.no-ip.org/test.txt");
+	auto modUpdater = std::make_unique<ModUpdater>("config.ini");
+	modUpdater->updateMods();
 
 	return (0);
 }

@@ -14,18 +14,18 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PatchInfo.cpp">
+    <ClCompile Include="CurlWrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CurlWrapper.cpp">
+    <ClCompile Include="ModUpdater.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PatchInfo.h">
+    <ClInclude Include="CurlWrapper.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="CurlWrapper.h">
+    <ClInclude Include="ModUpdater.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

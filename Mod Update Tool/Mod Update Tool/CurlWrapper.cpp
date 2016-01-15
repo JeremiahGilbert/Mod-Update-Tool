@@ -2,6 +2,7 @@
 
 #include <fstream>
 
+std::fstream CurlWrapper::fileStream;
 std::unique_ptr<CurlWrapper> CurlWrapper::singletonCurl = std::make_unique<CurlWrapper>();
 
 CurlWrapper::CurlWrapper() {
@@ -19,15 +20,17 @@ std::unique_ptr<CurlWrapper>& CurlWrapper::getCurl() {
 }
 
 void CurlWrapper::get(std::string name, std::string url) {
-	curl_easy_setopt(curlHandle_, CURLOPT_WRITEDATA, name.c_str());
 	curl_easy_setopt(curlHandle_, CURLOPT_URL, url.c_str());
+	fileStream.open(name, std::fstream::out | std::fstream::binary);
 	curl_easy_perform(curlHandle_);
+	fileStream.close();
 }
 
-size_t CurlWrapper::writeData(void* pointer, size_t size, size_t nmemb, char* fileName) {
-	std::fstream fs;
-	fs.open(fileName, std::fstream::out | std::fstream::binary);
-	fs.write((char*)pointer, size * nmemb);
-	fs.close();
+std::string CurlWrapper::escapeURL(std::string url) {
+	return std::string(curl_easy_escape(curlHandle_, url.c_str(), (int)url.length()));
+}
+
+size_t CurlWrapper::writeData(void* pointer, size_t size, size_t nmemb, void* ignore) {
+	fileStream.write((char*)pointer, size * nmemb);
 	return (size * nmemb);
 }
