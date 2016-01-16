@@ -37,9 +37,10 @@ ModUpdater::ModUpdater(std::string const& configuration) {
 	std::fstream mods;
 	mods.open(configuration_["updateList"], std::ios::in);
 
-	std::string mod;
-	while (std::getline(mods, mod)) {
-		modNames_.insert(mod);
+	std::string mod, link;
+	while (std::getline(mods, mod, ':')) {
+		std::getline(mods, link);
+		modNames_[mod] = link;
 	}
 	mods.close();
 }
@@ -48,10 +49,8 @@ ModUpdater::~ModUpdater() {}
 
 void ModUpdater::updateMods() const {
 	for (auto it = modNames_.begin(); it != modNames_.end(); ++it) {
-		if (!fileExists(configuration_.at("path") + *it)) {
-			auto& curl = std::make_unique<CurlWrapper>();
-			std::cout << "Downloading new file " << *it << std::endl;
-			curl->get(configuration_.at("path") + *it, configuration_.at("updateHost") + configuration_.at("updateRepository") + curl->escapeURL(*it));
+		if (!fileExists(configuration_.at("path") + (*it).first)) {
+			std::system(("\"megadl\\megadl.exe\" --path " + configuration_.at("path") + " " + (*it).second).c_str());
 		}
 	}
 	DIR* directory;
