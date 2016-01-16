@@ -50,7 +50,7 @@ ModUpdater::~ModUpdater() {}
 void ModUpdater::updateMods() const {
 	for (auto it = modNames_.begin(); it != modNames_.end(); ++it) {
 		if (!fileExists(configuration_.at("path") + (*it).first)) {
-			std::system(("\"megadl\\megadl.exe\" --path " + configuration_.at("path") + " " + (*it).second).c_str());
+			std::system(("megadl\\megadl.exe --path \"" + configuration_.at("path") + "\" " + (*it).second).c_str());
 		}
 	}
 	DIR* directory;
